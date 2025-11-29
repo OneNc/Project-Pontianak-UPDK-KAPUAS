@@ -418,7 +418,7 @@
                                         </a>
                                         <ul class="menu-sub">
                                             <li class="menu-item">
-                                                <a href="http://127.0.0.1:8003/layouts/without-menu" class="menu-link">
+                                                <a href="{{ route('group') }}" class="menu-link">
                                                     <i class="menu-icon icon-base ri ri-git-fork-fill"></i>
                                                     <div>Management Group</div>
                                                 </a>
