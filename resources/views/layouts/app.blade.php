@@ -320,7 +320,9 @@
                             <li class="nav-item navbar-dropdown dropdown-user dropdown">
                                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                                     <div class="avatar avatar-online">
-                                        <img src="{{ Auth::user() ? Auth::user()->profile_photo_url : asset('assets/img/avatars/1.png') }}"
+                                        {{-- <img src="{{ Auth::user() ? Auth::user()->profile_photo_url : asset('assets/img/avatars/1.png') }}"
+                                            alt="avatar" class="rounded-circle" /> --}}
+                                        <img src="{{ asset('assets/img/avatars/1.png') }}"
                                             alt="avatar" class="rounded-circle" />
                                     </div>
                                 </a>
@@ -331,17 +333,13 @@
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-shrink-0 me-2">
                                                     <div class="avatar avatar-online">
-                                                        <img src="{{ Auth::user() ? Auth::user()->profile_photo_url : asset('assets/img/avatars/1.png') }}"
+                                                        <img src="{{ asset('assets/img/avatars/1.png') }}"
                                                             alt="alt" class="w-px-40 h-auto rounded-circle" />
                                                     </div>
                                                 </div>
                                                 <div class="flex-grow-1">
                                                     <h6 class="mb-0 small">
-                                                        @if (Auth::check())
-                                                            {{ Auth::user()->name }}
-                                                        @else
-                                                            John Doe
-                                                        @endif
+                                                        {{ Auth::user()->name }}
                                                     </h6>
                                                     <small class="text-body-secondary">Admin</small>
                                                 </div>
@@ -351,19 +349,11 @@
                                     <li>
                                         <div class="dropdown-divider"></div>
                                     </li>
+
                                     <li>
-                                        <a class="dropdown-item"
-                                            href="{{ Route::has('profile.show') ? route('profile.show') : url('pages/profile-user') }}">
-                                            <i class="icon-base ri ri-user-3-line icon-22px me-2"></i> <span class="align-middle">My
-                                                Profile</span> </a>
+                                        <a class="dropdown-item" href=""> <i class="icon-base ri ri-settings-4-line icon-22px me-3"></i><span class="align-middle">Settings</span>
+                                        </a>
                                     </li>
-                                    @if (Auth::check() && Laravel\Jetstream\Jetstream::hasApiFeatures())
-                                        <li>
-                                            <a class="dropdown-item" href="{{ route('api-tokens.index') }}"> <i
-                                                    class="icon-base ri ri-settings-4-line icon-22px me-3"></i><span class="align-middle">Settings</span>
-                                            </a>
-                                        </li>
-                                    @endif
                                     <li>
                                         <div class="dropdown-divider my-1"></div>
                                     </li>
@@ -384,7 +374,7 @@
                                         <li>
                                             <div class="d-grid px-4 pt-2 pb-1">
                                                 <a class="btn btn-danger d-flex"
-                                                    href="{{ Route::has('login') ? route('login') : url('auth/login-basic') }}">
+                                                    href="{{ route('login') }}">
                                                     <small class="align-middle">Login</small>
                                                     <i class="icon-base ri ri-logout-box-r-line ms-2 icon-16px"></i>
                                                 </a>
@@ -521,9 +511,6 @@
     {{-- BEGIN: Theme JS --}}
     @vite(['resources/assets/js/main.js'])
     {{-- END: Theme JS --}}
-    {{-- Pricing Modal JS --}}
-    @stack('pricing-script')
-    {{-- END: Pricing Modal JS --}}
     {{-- BEGIN: Page JS --}}
     {{ $pageScript ?? '' }}
     {{-- END: Page JS --}}
