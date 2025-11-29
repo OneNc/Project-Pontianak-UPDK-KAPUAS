@@ -411,7 +411,7 @@
                                             <div>Gateway</div>
                                         </a>
                                     </li>
-                                    <li class="menu-item">
+                                    <li class="menu-item {{ request()->routeIs('meter/*') ? 'active' : '' }}">
                                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                                             <i class="menu-icon icon-base ri ri-dashboard-fill"></i>
                                             <div>Management</div>
@@ -424,7 +424,7 @@
                                                 </a>
                                             </li>
                                             <li class="menu-item">
-                                                <a href="http://127.0.0.1:8003/layouts/vertical" class="menu-link" target="_blank">
+                                                <a href="{{ route('meter') }}" class="menu-link">
                                                     <i class="menu-icon icon-base ri ri-hard-drive-2-line"></i>
                                                     <div>Management Meter</div>
                                                 </a>

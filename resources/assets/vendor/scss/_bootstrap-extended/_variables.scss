@@ -8,7 +8,7 @@
 // scss-docs-start gray-color-variables
 $white: #fff !default;
 $black: #262b43 !default;
-$pure-black: #000 !default;  // (C)
+$pure-black: #000 !default; // (C)
 
 // Instead of using a card bg, use a paper bg.
 $paper-bg: #fff !default; // (C)
@@ -43,8 +43,7 @@ $grays: (
   "600": $gray-600,
   "700": $gray-700,
   "800": $gray-800,
-  "900": $gray-900
-) !default;
+  "900": $gray-900) !default;
 
 // scss-docs-end gray-colors-map
 
@@ -77,7 +76,7 @@ $info: $blue !default;
 $warning: $orange !default;
 $danger: $red !default;
 $light: #dfdfe3 !default;
-$dark: #312d4b !default;
+$dark: #004883 !default;
 $gray: $gray-100 !default; // (C)
 
 // scss-docs-end theme-color-variables
@@ -92,8 +91,7 @@ $theme-colors: (
   "danger": $danger,
   "light": $light,
   "dark": $dark,
-  "gray": $gray
-) !default;
+  "gray": $gray) !default;
 
 // scss-docs-end theme-colors-map
 
@@ -123,7 +121,12 @@ $dark-border-subtle: tint-color($dark, $border-subtle-amount) !default;
 // scss-docs-end theme-border-subtle-variables
 
 // Characters which are escaped by the escape-svg function
-$escaped-characters: (("<", "%3c"), (">", "%3e"), ("#", "%23"), ("(", "%28"), (")", "%29")) !default;
+$escaped-characters: (
+  ("<", "%3c"),
+  (">", "%3e"),
+  ("#", "%23"),
+  ("(", "%28"),
+  (")", "%29")) !default;
 
 // Options
 // ******************************************************************************
@@ -155,8 +158,7 @@ $spacers: (
   9: $spacer * 2.25,
   10: $spacer * 2.5,
   11: $spacer * 2.75,
-  12: $spacer * 3
-) !default;
+  12: $spacer * 3) !default;
 $sizes-px: (
   px-18: 18px,
   px-20: 20px,
@@ -176,8 +178,7 @@ $sizes-px: (
   px-600: 600px,
   px-700: 700px,
   px-800: 800px,
-  auto: auto
-) !default; // (C)
+  auto: auto) !default; // (C)
 $icon-sizes: (
   6px: 6px,
   8px: 8px,
@@ -197,8 +198,7 @@ $icon-sizes: (
   40px: 40px,
   42px: 42px,
   46px: 46px,
-  48px: 48px
-) !default; // (C)
+  48px: 48px) !default; // (C)
 
 
 // Icon sizing
@@ -255,7 +255,7 @@ $container-max-widths: (
   lg: 960px,
   xl: 1140px,
   xxl: 1440px // Custom xxl size
-) !default;
+  ) !default;
 
 // scss-docs-end container-max-widths
 
@@ -324,9 +324,27 @@ $caret-spacing: .8em !default;
 // ******************************************************************************
 
 // scss-docs-start font-variables
-$font-family-sans-serif: "Inter", -apple-system, blinkmacsystemfont, "Segoe UI", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif !default;
-$font-family-serif: georgia, "Times New Roman", serif !default; // (C)
-$font-family-monospace: "SFMono-Regular", menlo, monaco, consolas, "Liberation Mono", "Courier New", monospace !default;
+$font-family-sans-serif: "Inter",
+  -apple-system,
+  blinkmacsystemfont,
+  "Segoe UI",
+  "Oxygen",
+  "Ubuntu",
+  "Cantarell",
+  "Fira Sans",
+  "Droid Sans",
+  "Helvetica Neue",
+  sans-serif !default;
+$font-family-serif: georgia,
+  "Times New Roman",
+  serif !default; // (C)
+$font-family-monospace: "SFMono-Regular",
+  menlo,
+  monaco,
+  consolas,
+  "Liberation Mono",
+  "Courier New",
+  monospace !default;
 $font-family-base: var(--#{$prefix}font-sans-serif) !default;
 $font-family-code: var(--#{$prefix}font-monospace) !default;
 
@@ -386,8 +404,7 @@ $display-font-sizes: (
   3: 3rem,
   4: 2.5rem,
   5: 2rem,
-  6: 1.5rem
-) !default;
+  6: 1.5rem) !default;
 
 $display-font-weight: 500 !default;
 
@@ -433,8 +450,7 @@ $zindex-levels: (
   2: 2,
   3: 3,
   4: 4,
-  5: 5
-) !default;
+  5: 5) !default;
 
 // scss-docs-end zindex-levels-map
 
@@ -542,12 +558,10 @@ $btn-focus-box-shadow: none !default;
 $btn-disabled-opacity: .45 !default;
 $btn-active-box-shadow: var(--#{$prefix}box-shadow-xs) !default;
 
-$btn-fab-box-shadow:
-  0px 3px 5px -1px rgba($black, .2),
+$btn-fab-box-shadow: 0px 3px 5px -1px rgba($black, .2),
   0px 5px 8px rgba($black, .14),
   0px 1px 14px rgba($black, .12) !default;
-$btn-fab-active-box-shadow:
-  0px 7px 8px -4px rgba($black, .2),
+$btn-fab-active-box-shadow: 0px 7px 8px -4px rgba($black, .2),
   0px 12px 17px 2px rgba($black, .14),
   0px 5px 22px 4px rgba($black, .12) !default;
 
@@ -728,7 +742,8 @@ $form-file-button-hover-bg: shade-color($form-file-button-bg, 5%) !default;
 $form-floating-padding-x: $input-padding-x !default;
 $form-floating-padding-y: $input-padding-y !default;
 $form-floating-line-height: $line-height-base !default;
-$form-floating-input-padding-top: ($form-floating-padding-y * 1.5) !default;
+$form-floating-input-padding-top: (
+  $form-floating-padding-y * 1.5) !default;
 $form-floating-input-padding-bottom: calc(($form-floating-padding-y * .5) + $border-width) !default;
 $form-floating-input-bg: var(--#{$prefix}gray-100) !default; // (C)
 $form-floating-label-padding-x: .375rem !default; // (C)
@@ -738,8 +753,7 @@ $form-floating-height: calc(($font-size-base * $form-floating-line-height) + ($f
 $form-floating-disabled-opacity: .38 !default; // (c)
 $form-floating-label-height: .75rem !default;
 $form-floating-label-opacity: 1 !default;
-$form-floating-transition:
-  opacity .2s ease-in-out,
+$form-floating-transition: opacity .2s ease-in-out,
   transform .2s ease-in-out !default;
 $form-floating-label-transform: scale(.867) translateY(-.6rem) translateX(-.0625rem) !default;
 $form-floating-label-transform-rtl: scale(.867) translateY(-.6rem) translateX(.0625rem) !default; // (C)
@@ -1147,7 +1161,10 @@ $offcanvas-color: $modal-content-color !default;
 // scss-docs-end offcanvas-variables
 
 // Utilities
-$overflows: auto, hidden, scroll, visible !default;
+$overflows: auto,
+  hidden,
+  scroll,
+  visible !default;
 
 // Config
 $rtl-support: false !default;
