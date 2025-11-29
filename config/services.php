@@ -34,5 +34,9 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    'teras_background' => [
+        'exe_path' => env('TERAS_BACKGROUND_EXE'),
+        'exe_path_edmicmd' => env('TERAS_BACKGROUND_EDMICMD_EXE'),
+    ],
 
 ];
