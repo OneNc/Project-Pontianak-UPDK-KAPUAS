@@ -18,14 +18,79 @@
         @vite(['resources/assets/js/datatable-defaults.js'])
         <script>
             document.addEventListener("DOMContentLoaded", function() {
+
+                // 1. FILTER GLOBAL
+                let currentStatusFilter = 'connect'; // default waktu pertama load
+
+                // mapping label Apex → value status di API
+                const statusMap = {
+                    'Connected': 'connect',
+                    'Disconnected': 'disconnect',
+                    'Invalid': 'invalid',
+                    'Deactive': 'deactive'
+                };
+
+                // 2. DATATABLE
+                var dtMeterStatus = $('#dtMeterStatus').DataTable({
+                    scrollY: 220,
+                    processing: true,
+                    serverSide: true,
+                    ordering: false,
+                    lengthChange: false,
+                    ajax: {
+                        url: '{{ route('api.dashboard.meters.status') }}',
+                        data: function(d) {
+                            // SELALU kirim status, jangan null
+                            d.status = currentStatusFilter;
+                        }
+                    },
+                    columns: [{
+                            data: 'name'
+                        },
+                        {
+                            data: 'brand'
+                        },
+                        {
+                            data: 'serial_number'
+                        },
+                        {
+                            data: 'status'
+                        },
+                    ],
+                });
+
+                $('#dtMeterStatusSearch').on('keyup', function() {
+                    dtMeterStatus.search(this.value).draw();
+                });
+
+                // 3. APEXCHART PIE
                 var meterStatusChartOptions = {
-                    series: [{{ $meters['connect'] }}, {{ $meters['disconnect'] }}, {{ $meters['invalid'] }}],
+                    series: [{{ $meters['connect'] }}, {{ $meters['disconnect'] }}, {{ $meters['invalid'] }}, {{ $meters['deactive'] }}],
                     chart: {
                         width: 380,
                         type: 'pie',
+                        events: {
+                            dataPointSelection: function(event, chartContext, config) {
+                                const selectedLabel = config.w.globals.labels[config.dataPointIndex];
+
+                                // ambil value status dari label
+                                const selectedStatus = statusMap[selectedLabel];
+
+                                // kalau mapping-nya ada, pakai itu
+                                if (selectedStatus) {
+                                    currentStatusFilter = selectedStatus;
+                                } else {
+                                    // fallback supaya nggak pernah kosong
+                                    currentStatusFilter = 'connect';
+                                }
+
+                                // reload datatable dengan status terbaru
+                                dtMeterStatus.ajax.reload(null, false);
+                            }
+                        }
                     },
-                    labels: ['Connected', 'Disconnected', "Invalid"],
-                    colors: ['#68ff63ff', '#FF6384', '#FFCE56'],
+                    labels: ['Connected', 'Disconnected', 'Invalid', 'Deactive'],
+                    colors: ['#68ff63ff', '#FF6384', '#FFCE56', '#dddddd'],
                     responsive: [{
                         breakpoint: 480,
                         options: {
@@ -43,40 +108,14 @@
                     }
                 };
 
-                var meterStatusChart = new ApexCharts(document.querySelector("#meterStatusChart"), meterStatusChartOptions);
+                var meterStatusChart = new ApexCharts(
+                    document.querySelector("#meterStatusChart"),
+                    meterStatusChartOptions
+                );
                 meterStatusChart.render();
-                var dtMeterStatus = $('#dtMeterStatus').DataTable({
-                    scrollY: 220,
-                    processing: true,
-                    serverSide: true,
-                    ordering: false,
-                    lengthChange: false,
-                    ajax: {
-                        url: '{{ route('api.dashboard.meters.status') }}',
-                        data: function(d) {
-                            d.status = 'connect';
-                        }
-                    },
-                    columns: [{
-                            data: 'name'
-                        },
-                        {
-                            data: 'brand'
-                        },
-                        {
-                            data: 'serial_number'
-                        },
-                        {
-                            data: 'status'
-                        },
-                    ],
-
-                });
-                $('#dtMeterStatusSearch').on('keyup', function() {
-                    dtMeterStatus.search(this.value).draw();
-                });
             });
         </script>
+
     </x-slot>
     <div class="row">
         <div class="col-md-4 mb-2 p-0 ps-2">

@@ -12,8 +12,9 @@ class DashboardController extends Controller
     {
         $meters = [
             'connect' => Meter::where('status', 'connect')->count(),
-            'disconnect' => Meter::where('status', 'disconnect')->count(),
+            'disconnect' => Meter::where('status', 'disconnect')->where('active', 'yes')->count(),
             'invalid' => Meter::where('status', 'invalid')->count(),
+            'deactive' => Meter::where('active', 'no')->count()
         ];
         return view('dashboard', compact('meters'));
     }
@@ -21,17 +22,25 @@ class DashboardController extends Controller
     {
         $status = $request->query('status');
         if ($status) {
-            $meters = \App\Models\Meter::where('status', $status)->get();
+            if ($status != "deactive") {
+                $meters = \App\Models\Meter::where('status', $status)->where('active', 'yes')->get();
+            } else {
+                $meters = \App\Models\Meter::where('active', 'no')->get();
+            }
             return DataTables::of($meters)
                 ->editcolumn('status', function ($meter) {
-                    $status = $meter->status;
-                    $badgeClass = match ($status) {
-                        'connect' => 'success',
-                        'disconnect' => 'warning',
-                        'invalid' => 'danger',
-                        default => 'secondary',
-                    };
-                    return "<span class='badge bg-{$badgeClass} text-capitalize'>{$status}</span>";
+                    if ($meter->active == "yes") {
+                        $status = $meter->status;
+                        $badgeClass = match ($status) {
+                            'connect' => 'success',
+                            'disconnect' => 'danger',
+                            'invalid' => 'info',
+                            default => 'secondary',
+                        };
+                        return "<span class='badge bg-{$badgeClass} text-capitalize'>{$status}</span>";
+                    } else if ($meter->active == "no") {
+                        return "<span class='badge bg-gray text-black text-capitalize'>Deactive</span>";
+                    }
                 })
                 ->rawColumns(['status'])
                 ->make(true);
