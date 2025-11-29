@@ -41,9 +41,9 @@ class MeterController extends Controller
                         'invalid' => 'bg-warning',
                         default => 'bg-label-dark'
                     };
-                    return '<span class="badge ' . $cls . '">' . e($label) . '</span>';
+                    return '<span class="badge ' . $cls . ' text-capitalize">' . e($label) . '</span>';
                 } else {
-                    return '<span class="badge bg-danger">Deactive</span>';
+                    return '<span class="badge bg-gray text-black">Deactive</span>';
                 }
             })
             ->addColumn('action', function ($r) {
