@@ -411,19 +411,19 @@
                                             <div>Gateway</div>
                                         </a>
                                     </li>
-                                    <li class="menu-item {{ request()->routeIs('meter/*') ? 'active' : '' }}">
+                                    <li class="menu-item {{ request()->routeIs('group', 'meter', 'group.*', 'meter.*') ? 'active open' : '' }}">
                                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                                             <i class="menu-icon icon-base ri ri-dashboard-fill"></i>
                                             <div>Management</div>
                                         </a>
                                         <ul class="menu-sub">
-                                            <li class="menu-item">
+                                            <li class="menu-item {{ request()->routeIs('group') ? 'active' : '' }}">
                                                 <a href="{{ route('group') }}" class="menu-link">
                                                     <i class="menu-icon icon-base ri ri-git-fork-fill"></i>
                                                     <div>Management Group</div>
                                                 </a>
                                             </li>
-                                            <li class="menu-item">
+                                            <li class="menu-item {{ request()->routeIs('meter', 'meter.*') ? 'active' : '' }}">
                                                 <a href="{{ route('meter') }}" class="menu-link">
                                                     <i class="menu-icon icon-base ri ri-hard-drive-2-line"></i>
                                                     <div>Management Meter</div>
@@ -431,14 +431,14 @@
                                             </li>
                                         </ul>
                                     </li>
-                                    <li class="menu-item">
+                                    <li class="menu-item {{ request()->routeIs('report.*') ? 'active open' : '' }}">
                                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                                             <i class="menu-icon icon-base ri ri-file-chart-line"></i>
                                             <div>Reports</div>
                                         </a>
                                         <ul class="menu-sub">
-                                            <li class="menu-item">
-                                                <a href="http://127.0.0.1:8003/layouts/without-menu" class="menu-link">
+                                            <li class="menu-item {{ request()->routeIs('report.instantaneous') ? 'active' : '' }}">
+                                                <a href="{{ route('report.instantaneous') }}" class="menu-link">
                                                     <i class="menu-icon icon-base ri ri-draft-fill"></i>
                                                     <div>Reports Instantaneous</div>
                                                 </a>

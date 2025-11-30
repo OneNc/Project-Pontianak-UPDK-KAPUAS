@@ -70,7 +70,7 @@ class MeterController extends Controller
                 $html  = '<div class="text-nowrap">';
 
                 // Edit
-                $html .= '<button type="button" class="btn btn-warning btn-sm btn-edit me-1" ' . $dataAttr . ' aria-label="Edit" data-bs-toggle="tooltip" data-bs-placement="top" title="Tooltip on top">'
+                $html .= '<button type="button" class="btn btn-warning btn-sm btn-edit me-1" ' . $dataAttr . ' aria-label="Edit" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">'
                     .  '<span class="icon-base ri ri-pencil-line icon-sm"></span>'
                     .  '</button>';
                 if ($r->active == "yes") {
@@ -109,11 +109,7 @@ class MeterController extends Controller
             $validated
         );
         if ($meter->type == "MK6N" || $meter->type == "MK6E") {
-            $meter['status'] = "connect";
-            $meter->update();
-            return response()->json([
-                'message' => $meter->wasRecentlyCreated ? 'created' : 'updated'
-            ], $meter->wasRecentlyCreated ? 201 : 200);
+            $exePath = config('services.teras_background.exe_path_edmicmd');
         } else {
             $exePath = config('services.teras_background.exe_path');
         }
@@ -124,29 +120,38 @@ class MeterController extends Controller
         $process = new Process([$exePath, 'sn', (string) $meter->id]);
         $process->setTimeout(60);
         $process->run();
-
-        if (!$process->isSuccessful()) {
-            Log::error('Background.exe gagal dijalankan', [
-                'id'     => $meter->id,
-                'stderr' => $process->getErrorOutput(),
-                'stdout' => $process->getOutput(),
-            ]);
-            throw new ProcessFailedException($process);
+        $rawOutput = trim($process->getOutput());
+        $stderr    = trim($process->getErrorOutput());
+        Log::info('Background.exe dijalankan', [
+            'id'        => $meter->id,
+            'exit_code' => $process->getExitCode(),
+            'stdout'    => $rawOutput,
+            'stderr'    => $stderr,
+        ]);
+        $data = json_decode($rawOutput, true);
+        if (json_last_error() !== JSON_ERROR_NONE || !is_array($data)) {
+            return response()->json([
+                'succes'  => false,
+                'message' => 'Output dari Background.exe tidak valid.'
+            ], 500);
         }
-        $output = trim($process->getOutput());
-        if ($output != $validated['serial_number']) {
+        $success    = (bool)($data['succes'] ?? false);
+        $statusCode = $success ? 200 : 500;
+
+        if ($success) {
+            $meter['status'] = "connect";
+            $meter->update();
+            return response()->json([
+                'message' => $meter->wasRecentlyCreated ? 'created' : 'updated'
+            ], $meter->wasRecentlyCreated ? 201 : 200);
+        } else {
             $meter['status'] = "wrong";
             $meter->update();
             return response()->json([
-                'message' => 'Serial number tidak cocok dengan perangkat.',
-                'errors'  => ['serial_number' => ['Serial number tidak cocok dengan perangkat.']],
+                'message' => 'Serial number tidak cocok dengan perangkat atau koneksi bermasalah. ping terlebih dahulu',
+                'errors'  => ['serial_number' => ['Pastikan serial number sama dengan perangkat']],
             ], 422);
         }
-        $meter['status'] = "connect";
-        $meter->update();
-        return response()->json([
-            'message' => $meter->wasRecentlyCreated ? 'created' : 'updated'
-        ], $meter->wasRecentlyCreated ? 201 : 200);
     }
     public function overview($number)
     {
@@ -161,21 +166,20 @@ class MeterController extends Controller
         } else {
             $exePath = config('services.teras_background.exe_path');
         }
-        // $exePath = config('services.teras_background.exe_path');
-
         $args = [$exePath, 'read', (string)$id, (string)Auth::id()];
         $process = new Process($args);
         $process->run();
-        if (!$process->isSuccessful()) {
-            Log::error('Background.exe gagal dijalankan', [
-                'id'     => $id,
-                'stderr' => $process->getErrorOutput(),
-                'stdout' => $process->getOutput(),
-            ]);
-            throw new ProcessFailedException($process);
+        $rawOutput = trim($process->getOutput());
+        $data = json_decode($rawOutput, true);
+        if (json_last_error() !== JSON_ERROR_NONE || !is_array($data)) {
+            return response()->json([
+                'succes'  => false,
+                'message' => 'Output dari Background.exe tidak valid.'
+            ], 500);
         }
-        $output = trim($process->getOutput());
-        Log::info("Read meter {$id} selesai", ['output' => $output]);
-        return response()->json(['message' => 'success'], 202);
+        $success    = (bool)($data['succes'] ?? false);
+        $statusCode = $success ? 200 : 500;
+        // Log::info("Read meter {$id} selesai", ['output' => $output]);
+        return response()->json(['message' => $data['message']], $statusCode);
     }
 }

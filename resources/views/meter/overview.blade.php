@@ -121,15 +121,15 @@
                 const phasorData = {
                     Vr: {
                         mag: 100,
-                        ang: 0
+                        ang: {{ $meter->latestInstant->phasor_vr ?? 0 }}
                     },
                     Vs: {
                         mag: 100,
-                        ang: 120
+                        ang: 120 - {{ $meter->latestInstant->phasor_vs ?? 0 }}
                     },
                     Vt: {
                         mag: 100,
-                        ang: 240
+                        ang: 240 + {{ $meter->latestInstant->phasor_vt ?? 0 }}
                     },
                     Ir: {
                         mag: 75,
@@ -137,11 +137,11 @@
                     },
                     Is: {
                         mag: 75,
-                        ang: 120 + {{ $meter->latestInstant->phasor_is ?? 0 }}
+                        ang: {{ $meter->latestInstant->phasor_is ?? 0 }}
                     },
                     It: {
                         mag: 75,
-                        ang: 249 + {{ $meter->latestInstant->phasor_it ?? 0 }}
+                        ang: {{ $meter->latestInstant->phasor_it ?? 0 }}
                     }
                 };
 

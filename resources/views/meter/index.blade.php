@@ -14,7 +14,7 @@
         <script>
             document.addEventListener("DOMContentLoaded", function() {
                 let dtMeters;
-                attachInvalidReset("#formMeter");
+                window.attachInvalidReset("#formMeter");
                 $(document).on('shown.bs.modal', '.dtr-bs-modal', function() {
                     $(this).find('.modal-dialog').addClass('modal-dialog-centered');
                 });
