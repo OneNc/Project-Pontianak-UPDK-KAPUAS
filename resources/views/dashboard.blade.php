@@ -4,10 +4,10 @@
     </x-slot>
 
     <x-slot:vendorStyle>
-        @vite(['resources/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.scss', 'resources/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.scss', 'resources/assets/vendor/libs/apex-charts/apex-charts.scss'])
+        @vite(['resources/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.scss', 'resources/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.scss', 'resources/assets/vendor/libs/apex-charts/apex-charts.scss', 'resources/assets/vendor/libs/sweetalert2/sweetalert2.scss'])
     </x-slot>
     <x-slot:vendorScript>
-        @vite(['resources/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js', 'resources/assets/vendor/libs/apex-charts/apexcharts.js'])
+        @vite(['resources/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js', 'resources/assets/vendor/libs/apex-charts/apexcharts.js', 'resources/assets/vendor/libs/sweetalert2/sweetalert2.js'])
     </x-slot>
 
     {{-- <x-slot:pageStyle>
@@ -18,19 +18,13 @@
         @vite(['resources/assets/js/datatable-defaults.js'])
         <script>
             document.addEventListener("DOMContentLoaded", function() {
-
-                // 1. FILTER GLOBAL
-                let currentStatusFilter = 'connect'; // default waktu pertama load
-
-                // mapping label Apex → value status di API
+                let currentStatusFilter = 'connect';
                 const statusMap = {
                     'Connected': 'connect',
                     'Disconnected': 'disconnect',
-                    'Invalid': 'invalid',
+                    'Invalid': 'wrong',
                     'Deactive': 'deactive'
                 };
-
-                // 2. DATATABLE
                 var dtMeterStatus = $('#dtMeterStatus').DataTable({
                     scrollY: 220,
                     processing: true,
@@ -38,9 +32,8 @@
                     ordering: false,
                     lengthChange: false,
                     ajax: {
-                        url: '{{ route('api.dashboard.meters.status') }}',
+                        url: '{{ route('dashboard.api.meters') }}',
                         data: function(d) {
-                            // SELALU kirim status, jangan null
                             d.status = currentStatusFilter;
                         }
                     },
@@ -63,56 +56,112 @@
                     dtMeterStatus.search(this.value).draw();
                 });
 
-                // 3. APEXCHART PIE
-                var meterStatusChartOptions = {
-                    series: [{{ $meters['connect'] }}, {{ $meters['disconnect'] }}, {{ $meters['invalid'] }}, {{ $meters['deactive'] }}],
-                    chart: {
-                        width: 380,
-                        type: 'pie',
-                        events: {
-                            dataPointSelection: function(event, chartContext, config) {
-                                const selectedLabel = config.w.globals.labels[config.dataPointIndex];
+                let meterStatusChart = null; // supaya bisa di-update nanti
 
-                                // ambil value status dari label
-                                const selectedStatus = statusMap[selectedLabel];
+                function loadMeterStatusChart() {
+                    $.ajax({
+                        url: '{{ route('dashboard.api.chart') }}',
+                        method: 'GET',
+                        dataType: 'json',
+                        success: function(res) {
+                            const series = [
+                                res.connect || 0,
+                                res.disconnect || 0,
+                                res.invalid || 0,
+                                res.deactive || 0,
+                            ];
 
-                                // kalau mapping-nya ada, pakai itu
-                                if (selectedStatus) {
-                                    currentStatusFilter = selectedStatus;
-                                } else {
-                                    // fallback supaya nggak pernah kosong
-                                    currentStatusFilter = 'connect';
+                            const options = {
+                                series: series,
+                                chart: {
+                                    width: 380,
+                                    type: 'pie',
+                                    events: {
+                                        dataPointSelection: function(event, chartContext, config) {
+                                            const selectedLabel = config.w.globals.labels[config.dataPointIndex];
+                                            const selectedStatus = statusMap[selectedLabel];
+                                            if (selectedStatus) {
+                                                currentStatusFilter = selectedStatus;
+                                                dtMeterStatus.ajax.reload(null, false);
+                                            }
+                                        }
+                                    }
+                                },
+                                labels: ['Connected', 'Disconnected', 'Invalid', 'Deactive'],
+                                colors: ['#68ff63ff', '#FF6384', '#FFCE56', '#dddddd'],
+                                responsive: [{
+                                    breakpoint: 480,
+                                    options: {
+                                        chart: {
+                                            width: 200
+                                        },
+                                        legend: {
+                                            position: 'bottom'
+                                        }
+                                    }
+                                }],
+                                legend: {
+                                    show: true,
+                                    position: 'bottom',
                                 }
+                            };
 
-                                // reload datatable dengan status terbaru
-                                dtMeterStatus.ajax.reload(null, false);
+                            if (meterStatusChart) {
+                                meterStatusChart.updateSeries(series);
+                            } else {
+                                meterStatusChart = new ApexCharts(
+                                    document.querySelector("#meterStatusChart"),
+                                    options
+                                );
+                                meterStatusChart.render();
                             }
+                        },
+                        error: function(xhr) {
+                            console.error('Gagal ambil data chart:', xhr.responseText);
                         }
-                    },
-                    labels: ['Connected', 'Disconnected', 'Invalid', 'Deactive'],
-                    colors: ['#68ff63ff', '#FF6384', '#FFCE56', '#dddddd'],
-                    responsive: [{
-                        breakpoint: 480,
-                        options: {
-                            chart: {
-                                width: 200
+                    });
+                }
+                loadMeterStatusChart();
+                $(document).on('click', '.btn-reconnect', function() {
+                    const $btn = $(this).prop('disabled', true);
+                    const d = $(this).data();
+                    Swal.fire({
+                        title: '<span class="fs-4">Reconnect Meter</span>',
+                        text: `Mencoba koneksi ke ${d.name}`,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        showConfirmButton: false,
+                        didOpen: () => Swal.showLoading()
+                    });
+                    $.ajax({
+                            url: `{{ route('dashboard.api.reconnect') }}`,
+                            type: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
                             },
-                            legend: {
-                                position: 'bottom'
+                            data: {
+                                id: d.id
                             }
-                        }
-                    }],
-                    legend: {
-                        show: true,
-                        position: 'bottom',
-                    }
-                };
-
-                var meterStatusChart = new ApexCharts(
-                    document.querySelector("#meterStatusChart"),
-                    meterStatusChartOptions
-                );
-                meterStatusChart.render();
+                        })
+                        .done(function(response) {
+                            loadMeterStatusChart();
+                            dtMeterStatus.ajax.reload(null, false);
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Meter berhasil terkoneksi',
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+                        })
+                        .fail(function(xhr) {
+                            Swal.close();
+                            $btn.prop('disabled', false);
+                            Swal.fire({
+                                icon: 'error',
+                                text: xhr.responseJSON?.message || 'Periksa koneksi atau coba lagi.'
+                            });
+                        });
+                });
             });
         </script>
 
