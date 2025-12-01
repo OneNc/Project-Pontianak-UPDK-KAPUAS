@@ -443,4 +443,3 @@
             </main>
         </div>
     </x-layouts.app>
-    +
