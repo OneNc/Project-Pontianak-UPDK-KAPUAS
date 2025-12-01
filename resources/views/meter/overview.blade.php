@@ -61,50 +61,6 @@
                 const baseStr = '{{ optional($meter->latestInstant?->created_at)->toIso8601String() }}';
                 let baseline = isNaN(new Date(baseStr)) ? new Date(0) : new Date(baseStr);
 
-                function startPolling5s() {
-                    const intervalId = setInterval(() => {
-                        $.ajax({
-                                url: `{{ route('api.meter.update', $meter->id) }}`,
-                                type: 'GET',
-                                headers: {
-                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                                }
-                            })
-                            .done(function(response) {
-                                if (response.meter && response.meter !== '[]') {
-                                    const data = JSON.parse(response.meter);
-                                    if (data.length > 0) {
-                                        const latest = data[0];
-                                        const latestCreatedAt = new Date(latest.created_at);
-                                        console.log('Latest Created At:', latestCreatedAt);
-                                        console.log('Baseline:', baseline);
-                                        if (latestCreatedAt.toISOString() > baseline.toISOString()) {
-                                            Swal.close();
-                                            $('#btnRead').prop('disabled', false);
-                                            Swal.fire({
-                                                icon: 'success',
-                                                title: 'Data diperbarui',
-                                                timer: 1500,
-                                                showConfirmButton: false
-                                            });
-                                            window.location.reload();
-                                        }
-                                    }
-                                }
-                            })
-                            .fail(function(xhr) {
-                                clearInterval(intervalId);
-                                Swal.close();
-                                $('#btnReadNow').prop('disabled', false);
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Gagal mengambil data terbaru',
-                                    text: xhr.responseJSON?.message || 'Periksa koneksi atau coba lagi.'
-                                });
-                            });
-                    }, 5000);
-                }
-
                 $('#btnRead').on('click', function() {
                     const $btn = $(this).prop('disabled', true);
                     Swal.fire({
@@ -116,14 +72,16 @@
                         didOpen: () => Swal.showLoading()
                     });
                     $.ajax({
-                            url: `{{ route('meter.overview.read', $meter) }}`,
+                            url: `{{ route('meter.overview.read') }}`,
                             type: 'POST',
                             headers: {
                                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            data: {
+                                meter_id: {{ $meter->id }}
                             }
                         })
                         .done(function(response) {
-                            // startPolling5s();
                             if (response.message === 'success') {
                                 Swal.close();
                                 $('#btnRead').prop('disabled', false);
