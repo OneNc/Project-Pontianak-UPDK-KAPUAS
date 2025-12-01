@@ -2,7 +2,7 @@
 <html lang="{{ session()->get('locale') ?? app()->getLocale() }}" class="layout-compact layout-menu-fixed"
     dir="ltr" data-skin="default" data-assets-path="{{ asset('/assets') . '/' }}"
     data-base-url="{{ url('/') }}" data-framework="laravel" data-template="horizontal-menu-template"
-    data-bs-theme="light">
+    data-bs-theme="light" data-semidark-menu="true">
 
 <head>
     <meta charset="utf-8" />
@@ -57,8 +57,8 @@
             {{-- BEGIN: Navbar --}}
             <nav class="layout-navbar navbar navbar-expand-xl align-items-center" id="layout-navbar">
                 <div class="container-xxl">
-                    <div class="navbar-brand app-brand demo d-none d-xl-flex py-0 me-6">
-                        <a href="{{ url('/') }}" class="app-brand-link gap-2">
+                    <div class="navbar-brand app-brand d-none d-xl-flex py-0 me-6">
+                        <a href="{{ url('/') }}" class="app-brand-link gap-2 d-none d-xl-block">
                             <span class="app-brand-logo ">
                                 <span class="text-primary">
                                     <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="40mm" height="18mm" version="1.1" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd" viewBox="0 0 10028 3500" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -107,17 +107,17 @@
                                     </svg>
                                 </span>
                             </span>
-                            <span class="app-brand-text demo menu-text fw-semibold ms-1">{{ config('app.name', 'Teras Itech Solusindo') }}</span>
+                            <span class="app-brand-text menu-text fw-semibold ms-1">{{ config('app.name', 'Teras Itech Solusindo') }}</span>
                         </a>
                         {{-- Display menu close icon only for horizontal-menu with navbar-full --}}
-                        <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-xl-none">
+                        <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-xl-none p-2 bg-white">
                             <i class="icon-base ri ri-close-line icon-sm"></i>
                         </a>
                     </div>
                     <div
-                        class="layout-menu-toggle navbar-nav align-items-xl-center me-4 me-xl-0 d-xl-none">
+                        class="layout-menu-toggle navbar-nav align-items-xl-center me-4 me-xl-0 d-xl-none w-100">
                         <a class="nav-item nav-link px-0 me-xl-6" href="javascript:void(0)">
-                            <i class="icon-base ri ri-menu-line icon-md"></i>
+                            <i class="icon-base ri ri-menu-line icon-md"></i> {{ config('app.name', 'Teras Itech Solusindo') }}
                         </a>
                     </div>
                     <div class="navbar-nav-right d-flex align-items-center justify-content-end" id="navbar-collapse">
