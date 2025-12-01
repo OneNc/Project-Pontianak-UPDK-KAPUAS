@@ -107,7 +107,7 @@
                                     </svg>
                                 </span>
                             </span>
-                            <span class="app-brand-text demo menu-text fw-semibold ms-1">Demo Application</span>
+                            <span class="app-brand-text demo menu-text fw-semibold ms-1">{{ config('app.name', 'Teras Itech Solusindo') }}</span>
                         </a>
                         {{-- Display menu close icon only for horizontal-menu with navbar-full --}}
                         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-xl-none">
@@ -123,7 +123,7 @@
                     <div class="navbar-nav-right d-flex align-items-center justify-content-end" id="navbar-collapse">
                         <ul class="navbar-nav flex-row align-items-center ms-md-auto">
                             {{-- Notification --}}
-                            <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-4 me-xl-1">
+                            {{-- <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-4 me-xl-1">
                                 <a class="nav-link dropdown-toggle hide-arrow btn btn-icon btn-text-secondary rounded-pill"
                                     href="javascript:void(0);" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                                     <i class="icon-base ri ri-notification-2-line icon-22px"></i>
@@ -340,7 +340,7 @@
                                         </div>
                                     </li>
                                 </ul>
-                            </li>
+                            </li> --}}
                             {{-- Notification --}}
                             {{-- User --}}
                             <li class="nav-item navbar-dropdown dropdown-user dropdown">
