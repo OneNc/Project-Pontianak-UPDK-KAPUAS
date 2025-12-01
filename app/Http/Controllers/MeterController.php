@@ -121,13 +121,6 @@ class MeterController extends Controller
         $process->setTimeout(60);
         $process->run();
         $rawOutput = trim($process->getOutput());
-        $stderr    = trim($process->getErrorOutput());
-        Log::info('Background.exe dijalankan', [
-            'id'        => $meter->id,
-            'exit_code' => $process->getExitCode(),
-            'stdout'    => $rawOutput,
-            'stderr'    => $stderr,
-        ]);
         $data = json_decode($rawOutput, true);
         if (json_last_error() !== JSON_ERROR_NONE || !is_array($data)) {
             return response()->json([
