@@ -151,15 +151,16 @@ class MeterController extends Controller
         $meter = Meter::where('id', $number)->with(['group', 'latestInstant'])->first();
         return view('meter.overview', compact('meter'));
     }
-    public function read($id)
+    public function read(request $request)
     {
-        $meter = \App\Models\Meter::where("id", $id)->first();
+        $meterId = $request->input('meter_id');
+        $meter = \App\Models\Meter::where("id", $meterId)->first();
         if ($meter->type == "MK6N" || $meter->type == "MK6E") {
             $exePath = config('services.teras_background.exe_path_edmicmd');
         } else {
             $exePath = config('services.teras_background.exe_path');
         }
-        $args = [$exePath, 'read', (string)$id, (string)Auth::id()];
+        $args = [$exePath, 'read', (string)$meterId, (string)Auth::id()];
         $process = new Process($args);
         $process->run();
         $rawOutput = trim($process->getOutput());
