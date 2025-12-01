@@ -358,18 +358,27 @@
       }
     }
     &:not(.active):not(.open) .menu-link:hover {
-      background-color: var(--#{$prefix}menu-hover-bg);
+      background-color: var(--#{$prefix}indigo);
+      color: var(--#{$prefix}white);
+    }
+    &.open{
+        > .menu-link{
+          background-color: var(--#{$prefix}white);
+          color: var(--#{$prefix}indigo);
+        }
     }
     &.active {
       > .menu-toggle {
-        background-color: var(--#{$prefix}menu-sub-active-bg);
+        background-color: var(--#{$prefix}white);
+        color: var(--#{$prefix}indigo);
       }
       > .menu-link:not(.menu-toggle) {
         box-shadow: var(--#{$prefix}box-shadow-xs);
       }
     }
     &.active:not(.open) > .menu-link:not(.menu-toggle)::before {
-      background-color: var(--#{$prefix}menu-active-color);
+      background-color: var(--#{$prefix}indigo);
+      color: var(--#{$prefix}white);
     }
   }
 

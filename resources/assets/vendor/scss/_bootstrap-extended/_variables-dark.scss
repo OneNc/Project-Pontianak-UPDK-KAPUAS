@@ -12,7 +12,7 @@
 
 // scss-docs-start gray-color-variables
 $white-dark: #fff !default;
-$black-dark: #282a42 !default;
+$black-dark: #004883 !default;
 $base-dark: #eaeaff !default; // (C)
 
 // Instead of using a card bg, use a paper bg.
@@ -48,8 +48,7 @@ $grays-dark: (
   "600": $gray-600-dark,
   "700": $gray-700-dark,
   "800": $gray-800-dark,
-  "900": $gray-900-dark
-) !default;
+  "900": $gray-900-dark) !default;
 
 // scss-docs-end gray-colors-map
 
@@ -90,8 +89,7 @@ $theme-colors-dark: (
   "danger": $danger-dark,
   "light": $light-dark,
   "dark": $dark-dark,
-  "gray": $gray-dark
-) !default;
+  "gray": $gray-dark) !default;
 
 // scss-docs-end theme-colors-map
 
