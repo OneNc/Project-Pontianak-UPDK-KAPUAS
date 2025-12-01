@@ -54,7 +54,7 @@
 <body>
     <div class="layout-wrapper layout-navbar-full layout-horizontal layout-without-menu">
         <div class="layout-container">
-            <!-- BEGIN: Navbar-->
+            {{-- BEGIN: Navbar --}}
             <nav class="layout-navbar navbar navbar-expand-xl align-items-center" id="layout-navbar">
                 <div class="container-xxl">
                     <div class="navbar-brand app-brand demo d-none d-xl-flex py-0 me-6">
@@ -109,7 +109,7 @@
                             </span>
                             <span class="app-brand-text demo menu-text fw-semibold ms-1">Demo Application</span>
                         </a>
-                        <!-- Display menu close icon only for horizontal-menu with navbar-full -->
+                        {{-- Display menu close icon only for horizontal-menu with navbar-full --}}
                         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-xl-none">
                             <i class="icon-base ri ri-close-line icon-sm"></i>
                         </a>
@@ -122,7 +122,7 @@
                     </div>
                     <div class="navbar-nav-right d-flex align-items-center justify-content-end" id="navbar-collapse">
                         <ul class="navbar-nav flex-row align-items-center ms-md-auto">
-                            <!-- Notification -->
+                            {{-- Notification --}}
                             <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-4 me-xl-1">
                                 <a class="nav-link dropdown-toggle hide-arrow btn btn-icon btn-text-secondary rounded-pill"
                                     href="javascript:void(0);" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
@@ -341,8 +341,8 @@
                                     </li>
                                 </ul>
                             </li>
-                            <!--/ Notification -->
-                            <!-- User -->
+                            {{-- Notification --}}
+                            {{-- User --}}
                             <li class="nav-item navbar-dropdown dropdown-user dropdown">
                                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                                     <div class="avatar avatar-online">
@@ -409,17 +409,17 @@
                                     @endif
                                 </ul>
                             </li>
-                            <!--/ User -->
+                            {{-- User --}}
                         </ul>
                     </div>
                 </div>
             </nav>
-            <!-- END: Navbar-->
-            <!-- Layout page -->
+            {{-- END: Navbar --}}
+            {{-- Layout page --}}
             <div class="layout-page">
-                <!-- Content wrapper -->
+                {{-- Content wrapper --}}
                 <div class="content-wrapper">
-                    <!-- Horizontal Menu -->
+                    {{-- Horizontal Menu --}}
                     <aside id="layout-menu" class="layout-menu-horizontal menu-horizontal menu flex-grow-0" style="touch-action: none; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
                         <div class="container-xxl d-flex h-100">
                             <a href="#" class="menu-horizontal-prev d-none"></a>
@@ -483,23 +483,17 @@
                                             </li>
                                         </ul>
                                     </li>
-                                    <li class="menu-item">
-                                        <a href="javascript:void(0);" class="menu-link">
-                                            <i class="menu-icon icon-base ri ri-radar-fill"></i>
-                                            <div></div>
-                                        </a>
-                                    </li>
                                 </ul>
                             </div><a href="#" class="menu-horizontal-next d-none"></a>
                         </div>
                     </aside>
-                    <!--/ Horizontal Menu -->
-                    <!-- Content -->
+                    {{-- Horizontal Menu --}}
+                    {{-- Content --}}
                     <div class="container-xxl flex-grow-1 container-p-y">
                         {{ $slot }}
                     </div>
-                    <!-- / Content -->
-                    <!-- Footer -->
+                    {{-- Content --}}
+                    {{-- Footer --}}
                     <footer class="content-footer footer bg-footer-theme">
                         <div class="container-xxl">
                             <div class="footer-container d-flex align-items-center justify-content-between py-4 flex-md-row flex-column">
@@ -515,20 +509,20 @@
                             </div>
                         </div>
                     </footer>
-                    <!-- / Footer -->
+                    {{-- Footer --}}
                     <div class="content-backdrop fade"></div>
                 </div>
-                <!--/ Content wrapper -->
+                {{-- Content wrapper --}}
             </div>
-            <!-- / Layout page -->
+            {{-- Layout page --}}
         </div>
-        <!-- / Layout Container -->
-        <!-- Overlay -->
+        {{-- Layout Container --}}
+        {{-- Overlay --}}
         <div class="layout-overlay layout-menu-toggle"></div>
-        <!-- Drag Target Area To SlideIn Menu On Small Screens -->
+        {{-- Drag Target Area To SlideIn Menu On Small Screens --}}
         <div class="drag-target"></div>
     </div>
-    <!-- / Layout wrapper -->
+    {{-- Layout wrapper --}}
     {{-- BEGIN: Vendor JS --}}
     @vite(['resources/assets/vendor/libs/jquery/jquery.js', 'resources/assets/vendor/libs/popper/popper.js', 'resources/assets/vendor/js/bootstrap.js', 'resources/assets/vendor/libs/node-waves/node-waves.js', 'resources/assets/vendor/libs/@algolia/autocomplete-js.js'])
     @vite(['resources/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js', 'resources/assets/vendor/libs/hammer/hammer.js', 'resources/assets/vendor/js/menu.js'])
