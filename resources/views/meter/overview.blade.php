@@ -8,6 +8,53 @@
     <x-slot:vendorScript>
         @vite(['resources/assets/vendor/libs/sweetalert2/sweetalert2.js'])
     </x-slot>
+    <x-slot:pageStyle>
+        <style>
+            .chip-R {
+                background: #dc3545;
+                color: #fff;
+                border-radius: .5rem;
+                padding: .15rem .5rem;
+                font-size: .75rem
+            }
+
+            .chip-S {
+                background: #fd7e14;
+                color: #fff;
+                border-radius: .5rem;
+                padding: .15rem .5rem;
+                font-size: .75rem
+            }
+
+            .chip-T {
+                background: #212529;
+                color: #fff;
+                border-radius: .5rem;
+                padding: .15rem .5rem;
+                font-size: .75rem
+            }
+
+            .kpi-label {
+                color: #6c757d;
+                font-size: .9rem;
+            }
+
+            .kpi-value {
+                font-weight: 600;
+            }
+
+            .phasor-box {
+                background: #ffffff;
+                border: 1px solid #004883;
+                border-radius: .75rem;
+                height: 150px;
+            }
+
+            .table> :not(caption)>*>* {
+                vertical-align: middle;
+            }
+        </style>
+    </x-slot>
     <x-slot:pageScript>
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -120,61 +167,61 @@
 
                 const phasorData = {
                     Vr: {
-                        mag: 100,
+                        mag: 120,
                         ang: {{ $meter->latestInstant->phasor_vr ?? 0 }}
                     },
                     Vs: {
-                        mag: 100,
-                        ang: 120 - {{ $meter->latestInstant->phasor_vs ?? 0 }}
+                        mag: 120,
+                        ang: {{ $meter->latestInstant->phasor_vs ?? 240 }}
                     },
                     Vt: {
-                        mag: 100,
-                        ang: 240 + {{ $meter->latestInstant->phasor_vt ?? 0 }}
+                        mag: 120,
+                        ang: {{ $meter->latestInstant->phasor_vt ?? 120 }}
                     },
                     Ir: {
-                        mag: 75,
+                        mag: 70,
                         ang: 0 + {{ $meter->latestInstant->phasor_ir ?? 0 }}
                     },
                     Is: {
-                        mag: 75,
-                        ang: {{ $meter->latestInstant->phasor_is ?? 0 }}
+                        mag: 70,
+                        ang: 240 + {{ $meter->latestInstant->phasor_is ?? 0 }}
                     },
                     It: {
-                        mag: 75,
-                        ang: {{ $meter->latestInstant->phasor_it ?? 0 }}
+                        mag: 70,
+                        ang: 120 + {{ $meter->latestInstant->phasor_it ?? 0 }}
                     }
                 };
 
                 function drawSinglePhasor(magnitude, angleDeg, color, label, centerX, centerY) {
                     const angleRad = angleDeg * Math.PI / 180;
                     const x = centerX + magnitude * Math.cos(angleRad);
-                    const y = centerY + magnitude * Math.sin(angleRad);
+                    const y = centerY - magnitude * Math.sin(angleRad);
 
                     ctx.strokeStyle = color;
-                    ctx.lineWidth = 1.5;
+                    ctx.lineWidth = 2;
                     ctx.beginPath();
                     ctx.moveTo(centerX, centerY);
                     ctx.lineTo(x, y);
                     ctx.stroke();
 
-                    const arrowLength = 12;
-                    const arrowAngle = Math.PI / 8;
-                    const dx = x - centerX;
-                    const dy = y - centerY;
-                    const angle = Math.atan2(dy, dx);
-                    for (let sign of [1, -1]) {
-                        ctx.beginPath();
-                        ctx.moveTo(x, y);
-                        ctx.lineTo(
-                            x - arrowLength * Math.cos(angle - sign * arrowAngle),
-                            y - arrowLength * Math.sin(angle - sign * arrowAngle)
-                        );
-                        ctx.stroke();
-                    }
+                    // const arrowLength = 12;
+                    // const arrowAngle = Math.PI / 8;
+                    // const dx = x - centerX;
+                    // const dy = y - centerY;
+                    // const angle = Math.atan2(dy, dx);
+                    // for (let sign of [1, -1]) {
+                    //     ctx.beginPath();
+                    //     ctx.moveTo(x, y);
+                    //     ctx.lineTo(
+                    //         x - arrowLength * Math.cos(angle - sign * arrowAngle),
+                    //         y - arrowLength * Math.sin(angle - sign * arrowAngle)
+                    //     );
+                    //     ctx.stroke();
+                    // }
 
-                    ctx.fillStyle = color;
-                    ctx.font = "14px Arial";
-                    ctx.fillText(label, x + 5, y - 5);
+                    // ctx.fillStyle = color;
+                    // ctx.font = "14px Arial";
+                    // ctx.fillText(label, x + 5, y - 5);
                 }
 
                 function drawPhasor() {
@@ -183,7 +230,7 @@
                     const centerY = canvas.height / 2;
                     const scale = Math.min(canvas.width, canvas.height) / 2.5 / 100;
 
-                    ctx.strokeStyle = "#aaa";
+                    ctx.strokeStyle = "#ccc";
                     ctx.lineWidth = 1;
                     ctx.beginPath();
                     ctx.moveTo(centerX, 0);
@@ -385,15 +432,15 @@
                                     <tr>
                                         <th>Diagram Phasor</th>
                                         <th class="text-end">
-                                            <span class="chip-R">V<sub>R</sub></span>
-                                            <span class="chip-S">V<sub>S</sub></span>
-                                            <span class="chip-T">V<sub>T</sub></span>
+                                            <span class="chip-R">R</span>
+                                            <span class="chip-S">S</span>
+                                            <span class="chip-T">T</span>
                                         </th>
                                     </tr>
                                 </thead>
                             </table>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body d-flex justify-content-center align-items-center">
                             <canvas id="phasorCanvas" class="phasor-box"></canvas>
                         </div>
                     </div>

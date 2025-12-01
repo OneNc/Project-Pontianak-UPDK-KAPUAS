@@ -1,6 +1,6 @@
     <x-layouts.app>
         <x-slot:title>
-            Management Meter
+            Report Instantaneous
         </x-slot>
 
         <x-slot:vendorStyle>
@@ -39,6 +39,14 @@
                         dtReport.clear().draw();
                     });
                     $('input[name="btnAscDesc"]').on('change', function() {
+                        $('.label-asc-desc')
+                            .removeClass('btn-primary')
+                            .addClass('btn-outline-primary');
+                        const $label = $('label[for="' + this.id + '"]');
+
+                        $label
+                            .removeClass('btn-outline-primary')
+                            .addClass('btn-primary');
                         dtReport.ajax.reload();
                     });
 
@@ -126,6 +134,9 @@
                         setEmptyMessage(`Tidak ada data untuk meter ini pada rentang tanggal terpilih.`, dtReport);
                         dtReport.ajax.reload(null, true);
                     });
+                    $('#cbSchedulerOnly').on("change", function() {
+                        dtReport.ajax.reload(null, true);
+                    })
                     dtReport = $('#dtReportData').DataTable({
                         processing: true,
                         serverSide: true,
@@ -141,6 +152,7 @@
                                 d.meter_id = $meterId.val() || null;
                                 d.range = $range.val();
                                 d.sorter = $('input[name="btnAscDesc"]:checked').val() || 'asc';
+                                d.scheduler_only = $('#cbSchedulerOnly').is(':checked') ? 1 : 0;
                             }
                         },
                         columns: [{
@@ -180,10 +192,6 @@
                                 name: 'frequency'
                             },
                             {
-                                data: 'battery',
-                                name: 'battery'
-                            },
-                            {
                                 data: 'power_active_import',
                                 name: 'power_active_import'
                             },
@@ -194,18 +202,6 @@
                             {
                                 data: 'power_apparent_import',
                                 name: 'power_apparent_import'
-                            },
-                            {
-                                data: 'power_active_export',
-                                name: 'power_active_export'
-                            },
-                            {
-                                data: 'power_reactive_export',
-                                name: 'power_reactive_export'
-                            },
-                            {
-                                data: 'power_apparent_export',
-                                name: 'power_apparent_export'
                             },
                             {
                                 data: 'export_energy_rate1',
@@ -271,6 +267,47 @@
                             $('#dtReportData td.dataTables_empty, #dtReportData td.dt-empty').addClass('text-start');
                         }
                     });
+                    $('#btnExport').on('click', function() {
+                        const meterId = $('#fieldMeterId').val();
+                        const range = $('#fieldFilterRange').val();
+                        const search = $('#fieldSearch').val() || '';
+                        const dataCount = dtReport.data().count();
+
+                        if (dataCount === 0) {
+                            Swal.fire({
+                                icon: 'info',
+                                title: 'Tidak ada data',
+                                text: 'Tidak ada data untuk diekspor pada filter yang dipilih.'
+                            });
+                            return;
+                        }
+
+                        if (!meterId || !range) {
+                            Swal.fire({
+                                icon: 'info',
+                                title: 'Lengkapi filter',
+                                text: 'Pilih meter & rentang tanggal dulu.'
+                            });
+                            return;
+                        }
+
+                        $('#export_meter_id').val(meterId);
+                        $('#export_range').val(range);
+                        $('#export_sorter').val($('input[name="btnAscDesc"]:checked').val() || 'asc');
+                        $('#export_scheduler_only').val($('#cbSchedulerOnly').is(':checked') ? 1 : 0);
+                        Swal.fire({
+                            title: 'Export XLSX',
+                            text: 'File akan disiapkan berdasarkan filter yang dipilih.',
+                            icon: 'question',
+                            showCancelButton: true,
+                            confirmButtonText: 'Export',
+                            cancelButtonText: 'Batal'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $('#exportForm')[0].submit();
+                            }
+                        });
+                    });
                 });
             </script>
         </x-slot>
@@ -297,6 +334,17 @@
                 </form>
             </div>
         </div>
+        <form id="exportForm"
+            action="{{ route('report.instantaneous.export') }}"
+            method="POST"
+            target="_blank">
+            @csrf
+            <input type="hidden" name="meter_id" id="export_meter_id">
+            <input type="hidden" name="range" id="export_range">
+            <input type="hidden" name="sorter" id="export_sorter">
+            <input type="hidden" name="scheduler_only" id="export_scheduler_only">
+        </form>
+
         <div class="row g-4">
             <aside class="col-12 col-lg-4">
                 <div class="sticky-top" style="top: 1rem;">
@@ -325,7 +373,7 @@
                     <div class="col-12">
                         <div class="card h-100">
                             <div class="card-header header-elements">
-                                <h5 class="mb-0 me-2">Report</h5>
+                                <h5 class="mb-0 me-2">Data Report</h5>
                                 <div class="card-header-elements ms-auto">
                                     <div class="form-floating form-floating-outline">
                                         <input type="text" id="fieldFilterRange" class="form-control form-control-sm" />
@@ -338,9 +386,13 @@
                                     <div class="col-md-6 text-md-start text-center">
                                         <div class="btn-group" role="group">
                                             <input type="radio" class="btn-check" name="btnAscDesc" id="btnAsc" value="asc" checked>
-                                            <label class="btn btn-outline-primary waves-effect" for="btnAsc">Oldest first</label>
+                                            <label class="btn btn-primary label-asc-desc" for="btnAsc">Oldest first</label>
                                             <input type="radio" class="btn-check" name="btnAscDesc" id="btnDesc" value="desc">
-                                            <label class="btn btn-outline-primary waves-effect" for="btnDesc">Newest first</label>
+                                            <label class="btn btn-outline-primary label-asc-desc" for="btnDesc">Newest first</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="cbSchedulerOnly" name="cbSchedulerOnly">
+                                            <label class="form-check-label" for="cbSchedulerOnly">Scheduler Only</label>
                                         </div>
                                     </div>
                                     <div class="col-md-6 text-md-end text-center">
@@ -364,13 +416,9 @@
                                             <th>Ampere T</th>
                                             <th>Cosphi</th>
                                             <th>Frequency</th>
-                                            <th>Battery</th>
-                                            <th>Power Active Import</th>
-                                            <th>Power Reactive Import</th>
-                                            <th>Power Apparent Import</th>
-                                            <th>Power Active Export</th>
-                                            <th>Power Reactive Export</th>
-                                            <th>Power Apparent Export</th>
+                                            <th>Power Active</th>
+                                            <th>Power Reactive</th>
+                                            <th>Power Apparent</th>
                                             <th>Export Energy Rate1</th>
                                             <th>Export Energy Rate2</th>
                                             <th>Export Energy Total</th>

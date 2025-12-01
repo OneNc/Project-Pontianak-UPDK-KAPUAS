@@ -33,11 +33,11 @@ Route::middleware('auth')->group(function () {
     // Report - instantaneous
     Route::get('/report/instantaneous', [InstantaneousController::class, "index"])->name('report.instantaneous');
     Route::get('/report/instantaneous/data', [InstantaneousController::class, 'api'])->name('report.instantaneous.api');
-    Route::get('/report/instantaneous/export/', [InstantaneousController::class, 'export'])->name('report.instantaneous.export');
+    Route::post('/report/instantaneous/export/', [InstantaneousController::class, 'export'])->name('report.instantaneous.export');
     // Report - loadprofile
     Route::get('/report/loadprofile', [LoadProfileController::class, "index"])->name('report.loadprofile');
     Route::get('/report/loadprofile/data', [LoadProfileController::class, 'api'])->name('report.loadprofile.api');
-    Route::get('/report/loadprofile/export/', [LoadProfileController::class, 'export'])->name('report.loadprofile.export');
+    Route::post('/report/loadprofile/export/', [LoadProfileController::class, 'export'])->name('report.loadprofile.export');
     Route::post('/report/loadprofile/{id}/read', [LoadProfileController::class, 'read'])->name('report.loadprofile.read');
     Route::get('/report/loadprofile/{id}/update', [LoadProfileController::class, 'api_update'])->name('report.loadprofile.api.update');
 
