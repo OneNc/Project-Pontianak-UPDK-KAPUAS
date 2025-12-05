@@ -36,7 +36,7 @@ window.applyFieldErrors = function (errors, formSel = "#formMain") {
             ) {
                 $el.addClass("is-invalid");
                 const $fb = $el
-                    .closest(".mb-3, .form-group, .row")
+                    .closest(".mb-3, .form-group, .row, .form-floating")
                     .find(".invalid-feedback")
                     .first();
                 if ($fb.length) $fb.html((messages || []).join("<br>"));

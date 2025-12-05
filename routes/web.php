@@ -5,18 +5,22 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\MeterController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GatewayController;
 use App\Http\Controllers\report\InstantaneousController;
 use App\Http\Controllers\report\LoadProfileController;
 use App\Http\Controllers\Report\ReportController;
 
 Route::middleware('auth')->group(function () {
+    // Dashboard
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/meters', [DashboardController::class, 'api_meters'])->name('dashboard.api.meters');
     Route::get('/dashboard/chart', [DashboardController::class, 'api_chart'])->name('dashboard.api.chart');
     Route::post('/dashboard/reconnect', [DashboardController::class, 'api_reconnect'])->name('dashboard.api.reconnect');
     Route::post('/dashboard/reconnect/status', [DashboardController::class, 'api_reconnect_status'])->name('dashboard.api.reconnect.status');
-
-    Route::get('/gateway', fn() => view('gateway.index'))->name('gateway');
+    // Gateway
+    Route::get('/gateway', [GatewayController::class, "index"])->name('gateway');
+    Route::post('/gateway', [GatewayController::class, "store"])->name('gateway.store');
+    Route::get('/gateway/data', [GatewayController::class, "api"])->name('gateway.api');
     // Meter
     Route::get('/meter', [MeterController::class, 'index'])->name('meter');
     Route::post('/meter', [MeterController::class, 'store'])->name('meter.store');
