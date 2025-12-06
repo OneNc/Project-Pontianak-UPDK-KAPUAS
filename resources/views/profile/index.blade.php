@@ -233,51 +233,55 @@
                                 <th class="text-truncate">Device</th>
                                 <th class="text-truncate">Location</th>
                                 <th class="text-truncate">Recent Activities</th>
+                                <th class="text-truncate">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td class="text-truncate text-heading"><i
-                                        class="icon-base ri ri-macbook-line icon-20px text-warning me-3"></i>Chrome on Windows</td>
-                                <td class="text-truncate">HP Spectre 360</td>
-                                <td class="text-truncate">Switzerland</td>
-                                <td class="text-truncate">10, July 2021 20:07</td>
-                            </tr>
-                            <tr>
-                                <td class="text-truncate text-heading"><i
-                                        class="icon-base ri ri-android-line icon-20px text-success me-3"></i>Chrome on iPhone</td>
-                                <td class="text-truncate">iPhone 12x</td>
-                                <td class="text-truncate">Australia</td>
-                                <td class="text-truncate">13, July 2021 10:10</td>
-                            </tr>
-                            <tr>
-                                <td class="text-truncate text-heading"><i
-                                        class="icon-base ri ri-smartphone-line icon-20px text-danger me-3"></i>Chrome on Android</td>
-                                <td class="text-truncate">Oneplus 9 Pro</td>
-                                <td class="text-truncate">Dubai</td>
-                                <td class="text-truncate">14, July 2021 15:15</td>
-                            </tr>
-                            <tr>
-                                <td class="text-truncate text-heading"><i
-                                        class="icon-base ri ri-mac-line icon-20px text-info me-3"></i>Chrome on MacOS</td>
-                                <td class="text-truncate">Apple iMac</td>
-                                <td class="text-truncate">India</td>
-                                <td class="text-truncate">16, July 2021 16:17</td>
-                            </tr>
-                            <tr>
-                                <td class="text-truncate text-heading"><i
-                                        class="icon-base ri ri-macbook-line icon-20px text-warning me-3"></i>Chrome on Windows</td>
-                                <td class="text-truncate">HP Spectre 360</td>
-                                <td class="text-truncate">Switzerland</td>
-                                <td class="text-truncate">20, July 2021 21:01</td>
-                            </tr>
-                            <tr class="border-transparent">
-                                <td class="text-truncate text-heading"><i
-                                        class="icon-base ri ri-android-line icon-20px text-success me-3"></i>Chrome on Android</td>
-                                <td class="text-truncate">Oneplus 9 Pro</td>
-                                <td class="text-truncate">Dubai</td>
-                                <td class="text-truncate">21, July 2021 12:22</td>
-                            </tr>
+                            @foreach ($sessions as $session)
+                                @php
+                                    $iconClass = 'ri-smartphone-line text-success';
+                                    if ($session->is_desktop && str_contains(strtolower($session->platform_name), 'windows')) {
+                                        $iconClass = 'ri-macbook-line text-warning';
+                                    } elseif ($session->is_desktop && str_contains(strtolower($session->platform_name), 'mac')) {
+                                        $iconClass = 'ri-mac-line text-info';
+                                    } elseif ($session->is_mobile && str_contains(strtolower($session->platform_name), 'android')) {
+                                        $iconClass = 'ri-android-line text-success';
+                                    } elseif ($session->is_mobile && (str_contains(strtolower($session->platform_name), 'ios') || str_contains(strtolower($session->platform_name), 'iphone'))) {
+                                        $iconClass = 'ri-smartphone-line text-danger';
+                                    }
+                                @endphp
+                                <tr>
+                                    <td class="text-truncate text-heading">
+                                        <i class="icon-base ri {{ $iconClass }} icon-20px me-3"></i>
+                                        {{ $session->browser_name }} on {{ $session->platform_name ?? 'Unknown OS' }}
+                                    </td>
+                                    <td class="text-truncate">
+                                        {{ $session->device_name ?: ($session->is_desktop ? 'Desktop' : 'Unknown device') }}
+                                    </td>
+                                    <td class="text-truncate">
+                                        {{ $session->ip_address ?? '-' }}
+                                    </td>
+                                    <td class="text-truncate">
+                                        {{ \Carbon\Carbon::createFromTimestamp($session->last_activity)->diffForHumans() }}
+                                    </td>
+                                    <td class="text-truncate">
+                                        @if ($session->is_current_device)
+                                            <span class="badge bg-label-info">Current device</span>
+                                        @else
+                                            <form action="{{ route('profile.sessions.destroy', $session->id) }}"
+                                                method="POST"
+                                                onsubmit="return confirm('Logout device ini?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                    Logout
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+
                         </tbody>
                     </table>
                 </div>

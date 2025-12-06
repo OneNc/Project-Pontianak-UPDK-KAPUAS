@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Models\UserSession;
+use Jenssegers\Agent\Agent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -12,13 +15,15 @@ class ProfileController extends Controller
 {
     public function index()
     {
-        return view('profile.index', [
-            'user' => Auth::user(),
-        ]);
+        $user = Auth::user();
+        $sessions = UserSession::forUser($user->id)
+            ->orderByDesc('last_activity')
+            ->get();
+        return view('profile.index', compact("user", "sessions"));
     }
     public function updateProfile(Request $request)
     {
-        $user = Auth::user();
+        $user = User::where('id', auth::user()->id)->first();
         $oldUsername = $user->username;
         $validated = $request->validate([
             'name'          => ['required', 'string', 'max:255'],
@@ -73,5 +78,18 @@ class ProfileController extends Controller
         return redirect()
             ->route('login')
             ->with('status', 'Successfully. Please log in again.');
+    }
+    public function destroy(Request $request, string $sessionId)
+    {
+        $session = UserSession::forUser($request->user()->id)
+            ->where('id', $sessionId)
+            ->firstOrFail();
+
+        if ($session->is_current_device) {
+            abort(403, 'Tidak bisa logout session yang sedang digunakan.');
+        }
+
+        $session->delete();
+        return back()->with('status', 'Session / device tersebut sudah di-logout.');
     }
 }
