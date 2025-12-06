@@ -1,59 +1,331 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel 12 Starter Project
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Repository ini adalah project berbasis **Laravel 12** dengan manajemen package menggunakan **Composer** (PHP) dan **Yarn** (JavaScript).
 
-## About Laravel
+Silakan sesuaikan nama project, deskripsi, dan contoh perintah di bawah ini dengan kebutuhanmu.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🚀 Fitur Utama
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Framework backend: **Laravel 12**
+- Manajemen dependency PHP: **Composer**
+- Manajemen dependency frontend: **Yarn**
+- Struktur siap pakai untuk pengembangan aplikasi web modern
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## 🧩 Tech Stack
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- **PHP** (Laravel 12)
+- **Composer**
+- **Node.js** & **Yarn**
+- **MySQL / PostgreSQL / database lain** (sesuaikan)
+- **Vite** / Laravel Mix (sesuaikan dengan project-mu)
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## ✅ Prasyarat
 
-### Premium Partners
+Pastikan sudah terpasang di mesin kamu:
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+- **PHP** (minimal versi yang didukung Laravel 12, contoh: `>= 8.2`)
+- **Composer**
+- **Node.js** dan **Yarn**
+- **Git**
+- Database server (MySQL/PostgreSQL/dll)
+- Ekstensi PHP umum:
+  - `openssl`
+  - `pdo`
+  - `mbstring`
+  - `tokenizer`
+  - `xml`
+  - `ctype`
+  - `json`
+  - `bcmath` (jika dibutuhkan)
 
-## Contributing
+Cek versi dengan:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+php -v
+composer -V
+node -v
+yarn -v
+```
 
-## Code of Conduct
+## 📦 Instalasi Dependency
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 1. Dependency PHP (Composer)
 
-## Security Vulnerabilities
+Pastikan kamu berada di root folder project, lalu jalankan:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+composer install
+```
 
-## License
+Perintah ini akan meng-install semua package PHP yang didefinisikan di file `composer.json`.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 2. Dependency Frontend (Yarn)
+
+Masih di root folder project, jalankan:
+
+```bash
+yarn install
+```
+
+Perintah ini akan meng-install semua package JavaScript yang didefinisikan di file `package.json`.
+
+---
+
+## ⚙️ Konfigurasi Environment
+
+1. Duplikasi file `.env.example` menjadi `.env`:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Atur konfigurasi database dan lainnya di file `.env`:
+
+   ```env
+   APP_NAME="Nama Project"
+   APP_ENV=local
+   APP_KEY=
+   APP_DEBUG=true
+   APP_URL=http://localhost
+
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=nama_database
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
+
+3. Generate application key Laravel:
+
+   ```bash
+   php artisan key:generate
+   ```
+
+---
+
+## 🗄️ Migrasi Database & Seeder (opsional)
+
+Jika project menggunakan migration dan seeder:
+
+```bash
+# Hanya migration
+php artisan migrate
+
+# Migration + seeder
+php artisan migrate --seed
+```
+
+---
+
+## ▶️ Menjalankan Aplikasi
+
+### 1. Jalankan server PHP (Laravel)
+
+```bash
+php artisan serve
+```
+
+Biasanya akan berjalan di:
+
+```text
+http://127.0.0.1:8000
+```
+
+### 2. Jalankan frontend (Vite / asset bundler) dengan Yarn
+
+Jika menggunakan Vite:
+
+```bash
+yarn dev
+```
+
+Untuk build production:
+
+```bash
+yarn build
+```
+
+---
+
+## 🧪 Testing (opsional)
+
+Jika project sudah ada test:
+
+```bash
+php artisan test
+# atau
+phpunit
+```
+
+---
+
+## 🛠️ Jika Composer / Yarn Tidak Ada atau Tidak Bisa Digunakan
+
+Bagian ini membantu jika kamu mendapatkan error seperti:
+
+- `composer: command not found`
+- `yarn: command not found`
+- atau perintah tidak berjalan sebagaimana mestinya.
+
+### 1. Composer Tidak Terinstall / Error
+
+#### a. Cek apakah Composer terinstall
+
+```bash
+composer -V
+```
+
+Jika muncul error `command not found`, berarti Composer belum terinstall atau tidak ada di `PATH`.
+
+#### b. Install Composer (secara umum)
+
+**Windows**
+
+- Download installer dari situs resmi Composer (Composer-Setup.exe).
+- Jalankan installer, pilih lokasi PHP, ikuti wizard sampai selesai.
+- Setelah selesai, buka terminal baru (Command Prompt / PowerShell) dan coba:
+
+  ```bash
+  composer -V
+  ```
+
+**macOS / Linux (via CLI)**
+
+- Pastikan `php` sudah terinstall.
+- Jalankan:
+
+  ```bash
+  php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+  php composer-setup.php
+  php -r "unlink('composer-setup.php');"
+  ```
+
+- Pindahkan file `composer.phar` agar bisa diakses global:
+
+  ```bash
+  sudo mv composer.phar /usr/local/bin/composer
+  ```
+
+- Cek:
+
+  ```bash
+  composer -V
+  ```
+
+#### c. Composer ada tapi error
+
+Beberapa solusi umum:
+
+- Jalankan:
+
+  ```bash
+  composer clear-cache
+  composer install
+  ```
+
+- Jika error permission, coba dengan:
+
+  ```bash
+  sudo composer install
+  ```
+
+  (Tidak selalu disarankan, lebih baik perbaiki permission folder project.)
+
+- Pastikan versi PHP sesuai dengan requirement di `composer.json`.
+
+---
+
+### 2. Yarn Tidak Terinstall / Error
+
+#### a. Cek apakah Yarn terinstall
+
+```bash
+yarn -v
+```
+
+Jika `command not found`, berarti Yarn belum terinstall.
+
+#### b. Install Yarn lewat npm (umum, lintas OS)
+
+Pastikan Node.js sudah terinstall dan `npm` tersedia:
+
+```bash
+node -v
+npm -v
+```
+
+Install Yarn secara global:
+
+```bash
+npm install --global yarn
+```
+
+Setelah selesai, cek:
+
+```bash
+yarn -v
+```
+
+#### c. Menggunakan corepack (Node.js versi baru)
+
+Pada Node.js versi terbaru, kamu bisa menggunakan:
+
+```bash
+corepack enable
+corepack prepare yarn@stable --activate
+```
+
+#### d. Yarn error saat install
+
+Beberapa solusi umum:
+
+- Hapus folder `node_modules` dan file lock (`yarn.lock`):
+
+  ```bash
+  rm -rf node_modules
+  rm yarn.lock
+  yarn install
+  ```
+
+- Pastikan versi Node.js tidak terlalu lama atau terlalu baru untuk package di project (bisa coba upgrade/downgrade Node.js).
+- Jika permission error, di Linux bisa saja butuh perbaikan permission folder project (hindari `sudo yarn` bila tidak perlu).
+
+---
+
+## 📦 Build & Optimasi untuk Production (opsional)
+
+Beberapa perintah berguna saat deploy:
+
+```bash
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+
+Untuk menghapus cache:
+
+```bash
+php artisan config:clear
+php artisan route:clear
+php artisan view:clear
+```
+
+---
+
+## 📝 Catatan
+
+- Pastikan versi **PHP**, **Composer**, **Node.js**, dan **Yarn** sesuai dan saling kompatibel.
+- Di sistem Unix-like (Linux/macOS), cek permission folder `storage` dan `bootstrap/cache`:
+
+  ```bash
+  chmod -R 775 storage bootstrap/cache
+  ```
+
+- Sesuaikan semua contoh perintah dengan struktur dan kebutuhan project kamu.
