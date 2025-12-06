@@ -319,6 +319,95 @@ php artisan view:clear
 
 ---
 
+
+## 🚀 Optimasi Cache Browser (XAMPP)
+
+Bagian ini menjelaskan cara membuat file (CSS, JS, gambar, dll.) lebih sering disimpan di **cache browser** agar loading aplikasi lebih cepat.
+
+### 1. Pastikan Modul Apache Aktif di XAMPP
+
+Buka file `httpd.conf` XAMPP (biasanya ada di `C:\xampp\apache\conf\httpd.conf`) dan pastikan baris berikut **tidak** dikomentari (tanpa tanda `#` di depan):
+
+```apache
+LoadModule expires_module modules/mod_expires.so
+LoadModule headers_module modules/mod_headers.so
+```
+
+Jika sebelumnya ada `#` di depan, hilangkan lalu simpan file.
+
+### 2. Izinkan .htaccess di Folder Project
+
+Masih di `httpd.conf`, cari konfigurasi untuk `htdocs` atau VirtualHost yang kamu gunakan. Pastikan ada:
+
+```apache
+AllowOverride All
+```
+
+Contoh:
+
+```apache
+<Directory "C:/xampp/htdocs">
+    AllowOverride All
+    Require all granted
+</Directory>
+```
+
+Jika sebelumnya `AllowOverride None`, ubah menjadi `All`, lalu simpan.
+
+### 3. Tambahkan Aturan Cache di .htaccess (Folder public Laravel)
+
+Di project Laravel, buat atau edit file `.htaccess` di dalam folder `public/` (jika belum ada, bisa buat baru). Tambahkan konfigurasi berikut:
+
+```apache
+<IfModule mod_expires.c>
+    ExpiresActive On
+
+    # Default: semua file cache 1 bulan
+    ExpiresDefault "access plus 1 month"
+
+    # CSS & JS: cache 1 bulan
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType application/x-javascript "access plus 1 month"
+
+    # Gambar: cache 1 tahun
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+
+    # Font: cache 1 tahun
+    ExpiresByType font/ttf "access plus 1 year"
+    ExpiresByType font/woff "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType application/font-woff "access plus 1 year"
+</IfModule>
+
+<IfModule mod_headers.c>
+    # Tambahkan header Cache-Control untuk file statis
+    <FilesMatch "\.(js|css|jpg|jpeg|png|gif|svg|webp|ico|ttf|woff|woff2)$">
+        Header set Cache-Control "public, max-age=31536000"
+    </FilesMatch>
+</IfModule>
+```
+
+Dengan konfigurasi ini:
+
+- Browser akan menyimpan file statis (CSS, JS, gambar, font) di cache untuk jangka waktu tertentu.
+- Loading halaman berikutnya jadi lebih cepat karena browser tidak selalu download ulang file yang sama.
+
+### 4. Restart Apache di XAMPP
+
+Setelah mengubah `httpd.conf` dan `.htaccess`, jangan lupa:
+
+1. Buka XAMPP Control Panel.
+2. Klik **Stop** pada Apache.
+3. Klik **Start** lagi pada Apache.
+
+Setelah itu, buka kembali aplikasi Laravel kamu di browser dan coba refresh beberapa kali. File statis seharusnya sekarang lebih banyak diambil dari cache browser.
+
+
 ## 📝 Catatan
 
 - Pastikan versi **PHP**, **Composer**, **Node.js**, dan **Yarn** sesuai dan saling kompatibel.
