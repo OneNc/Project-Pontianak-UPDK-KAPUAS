@@ -85,12 +85,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="mb-5 d-flex justify-content-between mt-5">
-                            <div class="form-check mt-2">
-                                <input class="form-check-input" type="checkbox" id="remember-me" />
-                                <label class="form-check-label" for="remember-me"> Remember Me </label>
-                            </div>
-                        </div>
                         <button class="btn btn-primary d-grid w-100">Sign in</button>
                     </form>
                 </div>
