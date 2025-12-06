@@ -21,20 +21,27 @@ class LoadProfileController extends Controller
     }
     public function api(Request $request)
     {
-        $meterId = $request->input('meter_id'); # 1
-        $range = Str::of(trim($request->input('range')))->explode(' - ');
-        $start = Carbon::parse($range[0])->startOfDay();
-        $end   = Carbon::parse($range[1])->addDay()->startOfDay();
-        if (blank($meterId)) {
+        $meterId  = $request->input('meter_id');
+        $rangeRaw = trim($request->input('range'));
+        if (blank($meterId) || blank($rangeRaw)) {
             return DataTables::of(collect())->make(true);
         }
+
+        $range = Str::of($rangeRaw)->explode(' - ');
+        if ($range->count() < 2 || blank($range[0]) || blank($range[1])) {
+            return DataTables::of(collect())->make(true);
+        }
+
+        $start = Carbon::parse($range[0])->startOfDay();
+        $end   = Carbon::parse($range[1])->addDay()->startOfDay();
+
         $sorter = strtolower($request->get('sorter', 'asc'));
         $sorter = in_array($sorter, ['asc', 'desc']) ? $sorter : 'asc';
 
         $query = \App\Models\LoadProfile::query()
             ->where('id_meter', $meterId)
             ->where('created_at', '>', $start)
-            ->where('created_at', '<=',  $end)
+            ->where('created_at', '<=', $end)
             ->orderBy('created_at', $sorter);
 
         return DataTables::of($query)
@@ -43,6 +50,7 @@ class LoadProfileController extends Controller
             })
             ->make(true);
     }
+
     public function export(Request $request)
     {
         $meterId = $request->input('meter_id');
