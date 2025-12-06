@@ -49,13 +49,21 @@
                     <h4 class="mb-1">Welcome to Teras AMR! 👋</h4>
                     <p class="mb-5">Please sign-in to your account</p>
                     @error('login')
-                        <div class="alert alert-solid-danger d-flex align-items-center flex-wrap row-gap-2" role="alert">
+                        <div class="alert alert-solid-danger d-flex align-items-center flex-wrap row-gap-2">
                             <span class="alert-icon rounded">
                                 <i class="icon-base ri ri-error-warning-line icon-md"></i>
                             </span>
                             {{ $message }}
                         </div>
                     @enderror
+                    @if (session('status'))
+                        <div class="alert alert-solid-success d-flex align-items-center flex-wrap row-gap-2" role="alert">
+                            <span class="alert-icon rounded">
+                                <i class="icon-base ri ri-checkbox-circle-line icon-md"></i>
+                            </span>
+                            {{ session('status') }}
+                        </div>
+                    @endif
                     <form id="formAuthentication" class="mb-5" action="{{ route('login.store') }}" method="POST">
                         @csrf
                         <div class="form-floating form-floating-outline mb-5 form-control-validation">
