@@ -25,6 +25,8 @@ return new class extends Migration
             $table->float('avg_current_r')->nullable();
             $table->float('avg_current_s')->nullable();
             $table->float('avg_current_t')->nullable();
+            $table->float('avg_watts_total')->nullable();
+            $table->float('avg_var_total')->nullable();
             $table->float('cosphi')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
