@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('instantaneouses', function (Blueprint $table) {
+        Schema::create('instantaneous', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_meter')->constrained('meters')->onDelete('cascade');
             $table->float('voltage_r')->nullable();
