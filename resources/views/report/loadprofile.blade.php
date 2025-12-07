@@ -159,20 +159,20 @@
                                 name: 'record'
                             },
                             {
-                                data: 'import_wh',
-                                name: 'import_wh'
+                                data: 'export_wh_total',
+                                name: 'export_wh_total'
                             },
                             {
-                                data: 'export_wh',
-                                name: 'export_wh'
+                                data: 'import_wh_total',
+                                name: 'import_wh_total'
                             },
                             {
-                                data: 'import_varh',
-                                name: 'import_varh'
+                                data: 'export_varh_total',
+                                name: 'export_varh_total'
                             },
                             {
-                                data: 'export_varh',
-                                name: 'export_varh'
+                                data: 'import_varh_total',
+                                name: 'import_varh_total'
                             },
                             {
                                 data: 'avg_voltage_r',
@@ -199,8 +199,20 @@
                                 name: 'avg_current_t'
                             },
                             {
-                                data: 'cosphi',
-                                name: 'cosphi'
+                                data: 'avg_power_factor_total',
+                                name: 'avg_power_factor_total'
+                            },
+                            {
+                                data: 'avg_frequency',
+                                name: 'avg_frequency'
+                            },
+                            {
+                                data: 'avg_watts_total',
+                                name: 'avg_watts_total'
+                            },
+                            {
+                                data: 'avg_var_total',
+                                name: 'avg_var_total'
                             },
                         ],
                         language: {
@@ -346,17 +358,20 @@
                                         <tr>
                                             <th>Datetime</th>
                                             <th>Record</th>
-                                            <th>Import Wh</th>
-                                            <th>Export Wh</th>
-                                            <th>Import VArh</th>
-                                            <th>Export VArh</th>
-                                            <th>Voltage R</th>
-                                            <th>Voltage S</th>
-                                            <th>Voltage T</th>
-                                            <th>Ampere R</th>
-                                            <th>Ampere S</th>
-                                            <th>Ampere T</th>
-                                            <th>Cosphi</th>
+                                            <th>Export Wh Total</th>
+                                            <th>Export varh Total</th>
+                                            <th>Import Wh Total</th>
+                                            <th>Import varh Total</th>
+                                            <th>Avg Voltage Ph-A</th>
+                                            <th>Avg Voltage Ph-B</th>
+                                            <th>Avg Voltage Ph-C</th>
+                                            <th>Avg Current Ph-A</th>
+                                            <th>Avg Current Ph-B</th>
+                                            <th>Avg Current Ph-C</th>
+                                            <th>Avg Power Factor Total</th>
+                                            <th>Avg Frequency</th>
+                                            <th>Avg Watts Total</th>
+                                            <th>Avg var Total</th>
                                         </tr>
                                     </thead>
                                 </table>
