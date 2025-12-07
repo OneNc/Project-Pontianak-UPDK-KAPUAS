@@ -246,12 +246,6 @@
                                                     <div>Reports Load Profile</div>
                                                 </a>
                                             </li>
-                                            <li class="menu-item">
-                                                <a href="http://127.0.0.1:8003/layouts/vertical" class="menu-link">
-                                                    <i class="menu-icon icon-base ri ri-calendar-check-fill"></i>
-                                                    <div>Reports End of Billing</div>
-                                                </a>
-                                            </li>
                                         </ul>
                                     </li>
                                     <li class="menu-item {{ request()->routeIs('profile') ? 'active' : '' }}">
